@@ -7,23 +7,23 @@ using System.Text;
 public class ExportAssetBundles : Editor
 {
     //[MenuItem("热更打包/Build Asset Bundles")]
-    static void BuildABs()
-    {
-        AssetBundleBuild[] buildMap = new AssetBundleBuild[1];
-        buildMap[0].assetBundleName = "prefabBundles";
-        string[] names = {
-            "Assets/Prefabs/Capsule.prefab",
-            "Assets/Prefabs/Cube.prefab"};
-        buildMap[0].assetNames = names;
-        /*
-        buildMap[1].assetBundleName = "sceneBundles";
-        string[] names2 = {
-            "Assets/Scenes/scene.unity"};
-        buildMap[1].assetNames = names2;
-        */
+    //static void BuildABs()
+    //{
+    //    AssetBundleBuild[] buildMap = new AssetBundleBuild[1];
+    //    buildMap[0].assetBundleName = "prefabBundles";
+    //    string[] names = {
+    //        "Assets/Prefabs/Capsule.prefab",
+    //        "Assets/Prefabs/Cube.prefab"};
+    //    buildMap[0].assetNames = names;
+    //    /*
+    //    buildMap[1].assetBundleName = "sceneBundles";
+    //    string[] names2 = {
+    //        "Assets/Scenes/scene.unity"};
+    //    buildMap[1].assetNames = names2;
+    //    */
 
-        BuildPipeline.BuildAssetBundles("Assets/Abs", buildMap);
-    }
+    //    BuildPipeline.BuildAssetBundles("Assets/Abs", buildMap);
+    //}
 
     [MenuItem("热更打包/打包资源")]
     static void ExportResource()
@@ -48,7 +48,6 @@ public class ExportAssetBundles : Editor
 
         if (path.Length != 0)
         {
-            
             //打包  
             BuildPipeline.BuildPlayer(null, path, BuildTarget.StandaloneWindows, BuildOptions.BuildAdditionalStreamedScenes);
         }
@@ -57,23 +56,31 @@ public class ExportAssetBundles : Editor
     [MenuItem("热更打包/创建版本文件")]
     static void createVersionFile()
     {
-        string resPath = "C:/Users/Administrator/Desktop/tmp/";
+        string resPath = Application.dataPath + Path.DirectorySeparatorChar;
         // 获取Res文件夹下所有文件的相对路径和MD5值  
-        string[] files = Directory.GetFiles(resPath, "*", SearchOption.AllDirectories);
+        //string[] files = Directory.GetFiles(resPath, "*", SearchOption.AllDirectories);
         StringBuilder versions = new StringBuilder();
 
-        for (int i = 0, len = files.Length; i < len; i++)
+        //for (int i = 0, len = files.Length; i < len; i++)
+        //{
+        //    string filePath = files[i];
+        //    string extension = filePath.Substring(files[i].LastIndexOf("."));
+        //    if (extension == ".zip")
+        //    {
+        //        string relativePath = filePath.Replace(resPath, "").Replace("\\", "/");
+        //        string md5 = ExportAssetBundles.MD5File(filePath);
+        //        versions.Append(relativePath).Append(",").Append(md5).Append("\n");
+        //    }
+        //}
+        string zipPath = resPath + LGameConfig.UPDATE_FILE_ZIP;
+        if (!File.Exists(zipPath))
         {
-            string filePath = files[i];
-            string extension = filePath.Substring(files[i].LastIndexOf("."));
-            if (extension == ".unity3d" ||
-                extension == ".assetbundle")
-            {
-                string relativePath = filePath.Replace(resPath, "").Replace("\\", "/");
-                string md5 = ExportAssetBundles.MD5File(filePath);
-                versions.Append(relativePath).Append(",").Append(md5).Append("\n");
-            }
+            Debug.LogWarning("热更zip包不存在");
+            return;
         }
+        string md5 = ExportAssetBundles.MD5File(zipPath);
+        versions.Append(LGameConfig.UPDATE_FILE_ZIP).Append(",").Append(md5);
+
         // 生成配置文件  
         FileStream stream = new FileStream(resPath + "version.ver", FileMode.Create);
         byte[] data = Encoding.UTF8.GetBytes(versions.ToString());
@@ -82,6 +89,40 @@ public class ExportAssetBundles : Editor
         stream.Close();
 
         Debug.Log(" 版本文件： " + resPath + "version.ver");
+    }
+
+    [MenuItem("热更打包/创建Zip")]
+    static void createZipFile()
+    {
+        string srcPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar;
+        string outPath = Application.dataPath + Path.DirectorySeparatorChar;
+        cleanMeta(srcPath);
+        if (!Directory.Exists(srcPath))
+        {
+            Directory.CreateDirectory(srcPath);
+        }
+        LUtil.PackFiles(outPath + LGameConfig.UPDATE_FILE_ZIP, srcPath);
+
+        Debug.Log(" 热更zip包： " + outPath + LGameConfig.UPDATE_FILE_ZIP);
+    }
+
+    public static void cleanMeta(string path)
+    {
+        string[] names = Directory.GetFiles(path);
+        string[] dirs = Directory.GetDirectories(path);
+        foreach (string filename in names)
+        {
+            string ext = Path.GetExtension(filename);
+            if (ext.Equals(".meta"))
+            {
+                File.Delete(@filename);
+            }
+
+            foreach (string dir in dirs)
+            {
+                cleanMeta(dir);
+            }
+        }
     }
 
     public static string MD5File(string file)

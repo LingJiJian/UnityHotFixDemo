@@ -1919,6 +1919,11 @@
         <para>The current NetworkClient being used by the manager.</para>
       </summary>
     </member>
+    <member name="P:UnityEngine.Networking.NetworkManager.clientLoadedScene">
+      <summary>
+        <para>This is true if the client loaded a new scene when connecting to the server.</para>
+      </summary>
+    </member>
     <member name="P:UnityEngine.Networking.NetworkManager.connectionConfig">
       <summary>
         <para>The custom network configuration to use.</para>
