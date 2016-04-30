@@ -89,6 +89,8 @@
     <Compile Include="Assets\Slua\LuaObject\Custom\LuaSystem_Comparison_1_int.cs" />
     <Compile Include="Assets\Slua\LuaObject\Custom\LuaSystem_Func_1_int.cs" />
     <Compile Include="Assets\Slua\LuaObject\Custom\LuaSystem_Predicate_1_int.cs" />
+    <Compile Include="Assets\Slua\LuaObject\Custom\Lua_LGameConfig.cs" />
+    <Compile Include="Assets\Slua\LuaObject\Custom\Lua_LResUpdate.cs" />
     <Compile Include="Assets\Slua\LuaObject\Custom\Lua_System_Collections_Generic_Dictionary_2_int_string.cs" />
     <Compile Include="Assets\Slua\LuaObject\Custom\Lua_System_Collections_Generic_List_1_int.cs" />
     <Compile Include="Assets\Slua\LuaObject\Custom\Lua_System_String.cs" />

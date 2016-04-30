@@ -1,60 +1,56 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using UnityEngine.Events;
 using System.Collections;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 public class ExportAssetBundles : Editor
 {
-    //[MenuItem("热更打包/Build Asset Bundles")]
-    //static void BuildABs()
-    //{
-    //    AssetBundleBuild[] buildMap = new AssetBundleBuild[1];
-    //    buildMap[0].assetBundleName = "prefabBundles";
-    //    string[] names = {
-    //        "Assets/Prefabs/Capsule.prefab",
-    //        "Assets/Prefabs/Cube.prefab"};
-    //    buildMap[0].assetNames = names;
-    //    /*
-    //    buildMap[1].assetBundleName = "sceneBundles";
-    //    string[] names2 = {
-    //        "Assets/Scenes/scene.unity"};
-    //    buildMap[1].assetNames = names2;
-    //    */
-
-    //    BuildPipeline.BuildAssetBundles("Assets/Abs", buildMap);
-    //}
-
-    [MenuItem("热更打包/打包资源")]
-    static void ExportResource()
+    public static void Run()
     {
-        // 打开保存面板，获得用户选择的路径  
-        string path = EditorUtility.SaveFilePanel("Save Resource", "", "New Resource", "assetbundle");
-
-        if (path.Length != 0)
-        {
-            // 选择的要保存的对象  
-            Object[] selection = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
-            //打包  
-            BuildPipeline.BuildAssetBundle(Selection.activeObject, selection, path, BuildAssetBundleOptions.CollectDependencies | BuildAssetBundleOptions.CompleteAssets, BuildTarget.StandaloneWindows);
-        }
+        CreateResources();
+        CreateZipFile();
+        CreateVersionFile();
     }
 
-    [MenuItem("热更打包/打包场景")]
-    static void ExportScene()
+    static void CreateResources()
     {
-        // 打开保存面板，获得用户选择的路径  
-        string path = EditorUtility.SaveFilePanel("Save Resource", "", "New Resource", "unity3d");
+        //// 选择的要保存的对象  4.x
+        //Object[] selection = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
+        ////打包  
+        //BuildPipeline.BuildAssetBundle(Selection.activeObject, selection, path, BuildAssetBundleOptions.CollectDependencies | BuildAssetBundleOptions.CompleteAssets, BuildTarget.StandaloneWindows);
 
-        if (path.Length != 0)
+        AssetBundleBuild[] buildMap = new AssetBundleBuild[2];
+
+        var basePath = Application.dataPath + ExportConfigWindow.EXPORT_PREFABS_PATH.Substring(6);
+        List<string> prefabs = new List<string>();
+        forEachHandle(basePath, ".prefab", (string filename) =>
         {
-            //打包  
-            BuildPipeline.BuildPlayer(null, path, BuildTarget.StandaloneWindows, BuildOptions.BuildAdditionalStreamedScenes);
-        }
+            prefabs.Add(ExportConfigWindow.EXPORT_PREFABS_PATH + filename.Replace(basePath, "").Replace(@"\","/"));
+        });
+
+        buildMap[0].assetBundleName = "prefabBundles";
+        buildMap[0].assetNames = prefabs.ToArray();
+
+        basePath = Application.dataPath + ExportConfigWindow.EXPORT_SCENE_PATH.Substring(6);
+        List<string> scenes = new List<string>();
+        forEachHandle(basePath, ".unity", (string filename) =>
+        {
+            scenes.Add(ExportConfigWindow.EXPORT_SCENE_PATH + filename.Replace(basePath, "").Replace(@"\", "/"));
+        });
+
+        buildMap[1].assetBundleName = "sceneBundles";
+        buildMap[1].assetNames = scenes.ToArray();
+
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", buildMap,BuildAssetBundleOptions.None,BuildTarget.StandaloneWindows);
+        AssetDatabase.Refresh();
+
+        Debug.Log("AssetBundles 打包完成 位于：Assets/StreamingAssets");
     }
 
-    [MenuItem("热更打包/创建版本文件")]
-    static void createVersionFile()
+    static void CreateVersionFile()
     {
         string resPath = Application.dataPath + Path.DirectorySeparatorChar;
         // 获取Res文件夹下所有文件的相对路径和MD5值  
@@ -91,12 +87,16 @@ public class ExportAssetBundles : Editor
         Debug.Log(" 版本文件： " + resPath + "version.ver");
     }
 
-    [MenuItem("热更打包/创建Zip")]
-    static void createZipFile()
+    static void CreateZipFile()
     {
         string srcPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar;
-        string outPath = Application.dataPath + Path.DirectorySeparatorChar;
-        cleanMeta(srcPath);
+        string outPath = ExportConfigWindow.EXPORT_OUT_PATH + Path.DirectorySeparatorChar;
+
+        forEachHandle(srcPath, ".meta", (string filename) =>
+        {
+            File.Delete(@filename);
+        });
+
         if (!Directory.Exists(srcPath))
         {
             Directory.CreateDirectory(srcPath);
@@ -106,21 +106,21 @@ public class ExportAssetBundles : Editor
         Debug.Log(" 热更zip包： " + outPath + LGameConfig.UPDATE_FILE_ZIP);
     }
 
-    public static void cleanMeta(string path)
+    public static void forEachHandle(string path,string matchExt,UnityAction<string> handle)
     {
         string[] names = Directory.GetFiles(path);
         string[] dirs = Directory.GetDirectories(path);
         foreach (string filename in names)
         {
             string ext = Path.GetExtension(filename);
-            if (ext.Equals(".meta"))
+            if (ext.Equals(matchExt))
             {
-                File.Delete(@filename);
+                handle.Invoke(filename);
             }
 
             foreach (string dir in dirs)
             {
-                cleanMeta(dir);
+                forEachHandle(dir, matchExt, handle);
             }
         }
     }

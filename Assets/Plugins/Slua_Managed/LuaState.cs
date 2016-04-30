@@ -930,9 +930,9 @@ end
 
 		internal static byte[] loadFile(string fn)
 		{
-			try
-			{
-				byte[] bytes;
+            try
+            {
+                byte[] bytes;
 				if (loaderDelegate != null)
 					bytes = loaderDelegate(fn);
 				else

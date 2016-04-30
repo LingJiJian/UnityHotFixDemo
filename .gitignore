@@ -5,6 +5,9 @@
 *.suo
 *.user
 *.booproj
+*.meta
+Assets/data.zip
+Assets/version.ver
 /Library
 /Library/FailedAssetImports.txt
 /Library/cache/

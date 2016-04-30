@@ -1,7 +1,5 @@
-<Common>
+<Root>
 	<Debug>1</Debug>
-</Common>
-<Update>
-	
-</Update>
+	<ResUrl>file:///C:/Users/Administrator/Desktop/tmp</ResUrl>
+</Root>
 

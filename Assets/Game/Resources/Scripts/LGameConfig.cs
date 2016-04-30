@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.IO;
 using System.Xml;
+using SLua;
 
-public class LGameConfig  {
-
+[CustomLuaClassAttribute]
+public class LGameConfig
+{
     // The config file path.
     public static readonly string CONFIG_FILE = "config.xml";
     // The lua data folder name.
@@ -14,6 +16,8 @@ public class LGameConfig  {
     public static readonly string UPDATE_FILE_ZIP = "data.zip";
     // is activate debug
     public bool isDebug = false;
+    // remote server resource url
+    public string SERVER_RES_URL = "";
 
     // The local file url prefix. (For assetbundle.)
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
@@ -42,21 +46,6 @@ public class LGameConfig  {
      */
     private LGameConfig()
     {
-        if (null != m_cInstance)
-        {
-            init();
-            return;
-        }
-
-        m_cInstance = this;
-    }
-
-    /**
-     * initialization
-     * 
-     */
-    private void init()
-    {
         LoadConfig();
     }
 
@@ -75,7 +64,7 @@ public class LGameConfig  {
     {
         if (null == m_cInstance)
         {
-            new LGameConfig();
+            m_cInstance = new LGameConfig();
         }
         return m_cInstance;
     }
@@ -131,6 +120,7 @@ public class LGameConfig  {
     public string GetLoadUrl(string strPathName)
     {
         string strFilePath = PersistentAssetsPath + strPathName;
+        
         if (File.Exists(strFilePath))
         {
             return strFilePath;
@@ -165,18 +155,20 @@ public class LGameConfig  {
     private void LoadConfig()
     {
         XmlDocument doc = new XmlDocument();
-        string path = PersistentAssetsPath + Path.DirectorySeparatorChar + CONFIG_FILE;
+        string path = PersistentAssetsPath + CONFIG_FILE;
         if (!File.Exists(path))
         {
-            path = StreamingAssetsPath + Path.DirectorySeparatorChar + CONFIG_FILE;
+            path = StreamingAssetsPath + CONFIG_FILE;
         }
         doc.Load(path);    //加载Xml文件  
 
         XmlElement rootElem = doc.DocumentElement;   //获取根节点  
 
-        XmlNodeList debugs = rootElem.GetElementsByTagName("Debug"); 
+        XmlNodeList debugs = rootElem.GetElementsByTagName("Debug");
         isDebug = debugs[0].InnerText == "1";
 
+        XmlNodeList resUrls = rootElem.GetElementsByTagName("ResUrl");
+        SERVER_RES_URL = resUrls[0].InnerText;
     }
 
 }

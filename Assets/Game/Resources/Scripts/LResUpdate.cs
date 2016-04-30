@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
@@ -7,26 +8,21 @@ using System.Text;
 using System.IO;
 using SLua;
 
+[CustomLuaClassAttribute]
 public class LResUpdate : MonoBehaviour
 {
     public static readonly string VERSION_FILE = "version.ver";
-    public static readonly string LOCAL_RES_URL = "file:///" + Application.persistentDataPath+"/";
-    public static readonly string SERVER_RES_URL = "file:///C:/Users/Administrator/Desktop/tmp/";
-    public static readonly string LOCAL_RES_PATH =  Application.persistentDataPath + "/";
+    public static readonly string LOCAL_RES_URL = LGameConfig.LOCAL_URL_PREFIX + Application.persistentDataPath + Path.DirectorySeparatorChar;
+    public static readonly string LOCAL_RES_PATH = Application.persistentDataPath + Path.DirectorySeparatorChar;
 
     private Dictionary<string, string> LocalResVersion;
     private Dictionary<string, string> ServerResVersion;
     private List<string> NeedDownFiles;
     private bool NeedUpdateLocalVersionFile = false;
 
-    void Start()
-    {
-        gameObject.GetComponent<Button>().onClick.AddListener(() => {
-            checkUpdate();
-        });
-    }
+    public UnityAction onCompleteHandler;
 
-    protected void checkUpdate()
+    public void checkUpdate()
     {
         //初始化  
         LocalResVersion = new Dictionary<string, string>();
@@ -39,7 +35,7 @@ public class LResUpdate : MonoBehaviour
             //保存本地的version  
             ParseVersionFile(localVersion.text, LocalResVersion);
             //加载服务端version配置  
-            StartCoroutine(this.DownLoad(SERVER_RES_URL + VERSION_FILE, delegate (WWW serverVersion)
+            StartCoroutine(this.DownLoad(LGameConfig.GetInstance().SERVER_RES_URL + Path.DirectorySeparatorChar + VERSION_FILE, delegate (WWW serverVersion)
             {
                 //保存服务端version  
                 ParseVersionFile(serverVersion.text, ServerResVersion);
@@ -64,7 +60,7 @@ public class LResUpdate : MonoBehaviour
         string file = NeedDownFiles[0];
         NeedDownFiles.RemoveAt(0);
 
-        StartCoroutine(this.DownLoad(SERVER_RES_URL + file, delegate (WWW w)
+        StartCoroutine(this.DownLoad(LGameConfig.GetInstance().SERVER_RES_URL + Path.DirectorySeparatorChar + file, delegate (WWW w)
         {
             //将下载的资源替换本地就的资源  
             ReplaceLocalRes(file, w.bytes);
@@ -75,28 +71,22 @@ public class LResUpdate : MonoBehaviour
     private void ReplaceLocalRes(string fileName, byte[] data)
     {
         string filePath = LOCAL_RES_PATH + fileName;
-        if (File.Exists(filePath))
-        {
-            FileStream stream = new FileStream(filePath, FileMode.Create);
-            stream.Write(data, 0, data.Length);
-            stream.Flush();
-            stream.Close();
 
-            //如果是更新包
-            if (fileName == LGameConfig.UPDATE_FILE_ZIP)
-            {
-                LUtil.UnpackFiles(filePath, LOCAL_RES_PATH);
-                File.Delete(filePath);
-            }
-        }
-        else
+        FileStream stream = new FileStream(filePath, FileMode.Create);
+        stream.Write(data, 0, data.Length);
+        stream.Flush();
+        stream.Close();
+
+        //如果是更新包
+        if (fileName == LGameConfig.UPDATE_FILE_ZIP)
         {
-            Debug.LogWarning("更新资源不存在:"+filePath);
+            LUtil.UnpackFiles(filePath, LOCAL_RES_PATH);
+            File.Delete(filePath);
         }
     }
 
     //显示资源
-    private IEnumerator _complate()
+    private /*IEnumerator*/ void Complate()
     {
         //using (WWW asset = new WWW(LOCAL_RES_URL + "newRes.assetbundle"))
         //{
@@ -108,12 +98,17 @@ public class LResUpdate : MonoBehaviour
         //    asset.Dispose();
         //}
 
-        using (WWW scene = new WWW(LOCAL_RES_URL + "newScene.unity3d"))
+        //using (WWW scene = new WWW(LOCAL_RES_URL + "newScene.unity3d"))
+        //{
+        //    yield return scene;
+        //    AssetBundle b = scene.assetBundle; //不要注释这句!!!不然加载不了场景（坑到爆炸
+        //    SceneManager.LoadScene("myScene");
+        //    scene.Dispose();
+        //}
+
+        if (onCompleteHandler != null)
         {
-            yield return scene;
-            AssetBundle b = scene.assetBundle; //不要注释这句!!!不然加载不了场景（坑到爆炸
-            SceneManager.LoadScene("myScene");
-            scene.Dispose();
+            onCompleteHandler.Invoke();
         }
     }
 
@@ -137,7 +132,8 @@ public class LResUpdate : MonoBehaviour
             Debug.Log("更新资源");
         }
         //加载显示对象  
-        StartCoroutine(_complate());
+        //StartCoroutine(Complate());
+        Complate();
     }
 
     private void CompareVersion()
@@ -146,6 +142,7 @@ public class LResUpdate : MonoBehaviour
         {
             string fileName = version.Key;
             string serverMd5 = version.Value;
+
             //新增的资源  
             if (!LocalResVersion.ContainsKey(fileName))
             {

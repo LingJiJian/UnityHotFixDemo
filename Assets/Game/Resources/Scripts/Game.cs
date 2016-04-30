@@ -1,11 +1,14 @@
 ﻿using SLua;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Game : MonoBehaviour
 {
     private static LuaSvr _l;
     private int _progress = 0;
+
+    public UnityAction<int> onProgressHandler;
 
     void Start()
     {
@@ -39,6 +42,11 @@ public class Game : MonoBehaviour
     void tick(int p)
     {
         _progress = p;
+
+        if (onProgressHandler != null)
+        {
+            onProgressHandler.Invoke(p);
+        }
     }
 
     protected byte[] _loadFileWithSuffix(string strFile)

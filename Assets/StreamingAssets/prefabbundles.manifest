@@ -1,0 +1,33 @@
+ManifestFileVersion: 0
+CRC: 667563401
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4ba25838dc75770b0925fbfb097ffbd8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: d1f5e5ab22fb5dc5d556fbf36cfd686f
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+Assets:
+- Assets/Game/Resources/Prefabs/Cube.prefab
+- Assets/Game/Resources/Prefabs/Capsule.prefab
+Dependencies: []

@@ -1,15 +1,6 @@
 
 local TestCube = LDeclare("TestCube", LClass("TestCube"))
 
--- The c# class object.
-TestCube.this = false
-
--- The transform
-TestCube.transform = false
-
--- The c# gameObject.
-TestCube.gameObject = false
-
 -- Awake method.
 function TestCube:Awake()
     print("TestCube:Awake")
