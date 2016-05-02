@@ -83,7 +83,7 @@ namespace SLua
         public static void OnGetNoUseList(out List<string> list)
         {
             list = new List<string>
-        {
+        {      
             "HideInInspector",
             "ExecuteInEditMode",
             "AddComponentMenu",
@@ -92,7 +92,7 @@ namespace SLua
             "DisallowMultipleComponent",
             "SerializeField",
             "AssemblyIsEditorAssembly",
-            "Attribute",
+            "Attribute", 
             "Types",
             "UnitySurrogateSelector",
             "TrackedReference",
@@ -115,7 +115,7 @@ namespace SLua
             "TextClipping",
             "Gizmos",
              "ADBannerView",
-            "ADInterstitialAd",
+            "ADInterstitialAd",            
             "Android",
             "Tizen",
             "jvalue",
@@ -130,7 +130,7 @@ namespace SLua
             "Handheld",
             "LocalNotification",
             "NotificationServices",
-            "RemoteNotificationType",
+            "RemoteNotificationType",      
             "RemoteNotification",
             "SamsungTV",
             "TextureCompressionQuality",
@@ -138,7 +138,7 @@ namespace SLua
             "TouchScreenKeyboard",
             "MovieTexture",
             "UnityEngineInternal",
-            "Terrain",
+            "Terrain",                            
             "Tree",
             "SplatPrototype",
             "DetailPrototype",
@@ -146,8 +146,8 @@ namespace SLua
             "MeshSubsetCombineUtility",
             "AOT",
             "Social",
-            "Enumerator",
-            "SendMouseEvents",
+            "Enumerator",       
+            "SendMouseEvents",               
             "Cursor",
             "Flash",
             "ActionScript",
@@ -159,9 +159,10 @@ namespace SLua
             "GraphicRebuildTracker",
             "Advertisements",
             "UnityEditor",
-            "WSA",
-            "Apple.TV",
-            "EventProvider",
+			"WSA",
+			"EventProvider",
+			"Apple",
+			"ClusterInput",
         };
         }
 

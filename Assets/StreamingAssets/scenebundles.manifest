@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4119779434
+CRC: 4204680829
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a78ab2e2a45b256605158c50f3d402b0
+    Hash: 5a7bf97b79de41f9c00e610dbb551e0e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2414350854cf7d2ac82fd97d2bb094cf
@@ -83,4 +83,5 @@ Assets:
 - Assets/Game/Resources/Scenes/myScene.unity
 - Assets/Game/Resources/Scenes/luaScene.unity
 - Assets/Game/Resources/Scenes/begin.unity
-Dependencies: []
+Dependencies:
+- Assets/StreamingAssets/prefabbundles

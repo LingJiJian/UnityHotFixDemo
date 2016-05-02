@@ -11,9 +11,24 @@ function TestCube:Awake()
         return
     end
 
-    self.m_strName = self.gameObject.name;
+    local c=coroutine.create(function()
+        local www = WWW(LResUpdate.LOCAL_RES_URL .. "/prefabbundles")
+        Yield(www)
+        local b = www.assetBundle;
+        self.bundle = b;
+        UnityEngine.Object.Instantiate(b:LoadAsset("Capsule",GameObject), 
+            self.gameObject.transform.position, 
+            self.gameObject.transform.rotation)
 
-    print("My name is: " .. self.m_strName)
+        www:Dispose()
+
+        Yield(WaitForSeconds(2))
+
+        UnityEngine.Object.Instantiate(self.bundle:LoadAsset("Capsule",GameObject), 
+        Vector3(391.639,185.317,0), 
+        self.gameObject.transform.rotation)
+    end)
+    coroutine.resume(c)
 end
 
 -- Start method.
@@ -23,7 +38,7 @@ end
 
 -- Update method.
 function TestCube:Update()
-    print("TestCube:Update")
+    -- print("TestCube:Update")
 end
 
 -- On destroy method.

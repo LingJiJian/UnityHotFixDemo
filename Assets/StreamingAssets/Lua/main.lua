@@ -1,5 +1,6 @@
 
 import "UnityEngine"
+import "UnityEngine.Object"
 import "UnityEngine.SceneManagement"
 require "LGlobal"
 require "LVersion"
@@ -17,30 +18,24 @@ local function main()
 	print("main start")
 
 	local btn = GameObject.Find('btn_go');
-
-	if LGameConfig.GetInstance().isDebug then
-
-		SceneManager.LoadScene("luaScene");
-	else
-		local resUpdate = btn:AddComponent("LResUpdate")
-		resUpdate.onCompleteHandler = function()
-			print("热更完成")
-
-			local c=coroutine.create(function()
-			    local www = WWW(LResUpdate.LOCAL_RES_URL .. "/".. "newScene.unity3d")
-			    Yield(www)
-			    local b = www.assetBundle;--不要注释这句!!!不然加载不了场景（坑到爆炸
-	            SceneManager.LoadScene("myScene");
-			end)
-			coroutine.resume(c)
-		end
-		btn:GetComponent('Button').onClick:AddListener(function()
-			resUpdate:checkUpdate()
-		end)
-	end
-
 	
+	local resUpdate = btn:AddComponent("LResUpdate")
+	resUpdate.onCompleteHandler = function()
+		print("加载完成")
 
+		local c=coroutine.create(function()
+		    local www = WWW(LResUpdate.LOCAL_RES_URL .. "/scenebundles")
+		    Yield(www)
+		    local b = www.assetBundle;--不要注释这句!!!加载assetBundle
+            SceneManager.LoadScene("luaScene");
+
+            www:Dispose()
+		end)
+		coroutine.resume(c)
+	end
+	btn:GetComponent('Button').onClick:AddListener(function()
+		resUpdate:checkUpdate()
+	end)
 end
 -- Declare global function.
 LDeclare("main", main)

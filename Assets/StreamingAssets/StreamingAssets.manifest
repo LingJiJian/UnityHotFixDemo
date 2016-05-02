@@ -6,4 +6,5 @@ AssetBundleManifest:
       Dependencies: {}
     Info_1:
       Name: scenebundles
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: prefabbundles

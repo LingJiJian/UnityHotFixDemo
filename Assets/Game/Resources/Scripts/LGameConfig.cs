@@ -120,8 +120,8 @@ public class LGameConfig
     public string GetLoadUrl(string strPathName)
     {
         string strFilePath = PersistentAssetsPath + strPathName;
-        
-        if (File.Exists(strFilePath))
+
+        if (File.Exists(strFilePath) && (!this.isDebug))
         {
             return strFilePath;
         }

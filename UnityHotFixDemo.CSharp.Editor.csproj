@@ -116,13 +116,46 @@
     <Compile Include="Assets\Slua\Editor\LuaCodeGen.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Slua\Resources\circle\circle.txt" />
     <None Include="Assets\Slua\Resources\custom.txt" />
     <None Include="Assets\Slua\Resources\delegate.txt" />
-    <None Include="Assets\Slua\Resources\main2.txt" />
+    <None Include="Assets\Slua\Resources\main.txt" />
     <None Include="Assets\Slua\Resources\module\some.txt" />
     <None Include="Assets\Slua\Resources\perf.txt" />
     <None Include="Assets\Slua\Resources\valuetype.txt" />
     <None Include="Assets\Slua\Resources\varobj.txt" />
+    <None Include="Assets\Slua\example\example-cjson\Resources\cjsonTest.txt" />
+    <None Include="Assets\Slua\example\example-cjson\Resources\cjsonTest\test1.txt" />
+    <None Include="Assets\Slua\example\example-cjson\Resources\cjsonTest\util.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\ltn12.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\lua_socket_test.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\luasocket_test\test2.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\luasocket_test\testclnt.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\mime.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\socket.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\socket\ftp.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\socket\http.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\socket\smtp.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\socket\tp.txt" />
+    <None Include="Assets\Slua\example\example-luasocket\Resources\socket\url.txt" />
+    <None Include="Assets\Slua\example\example-pbc\Resources\parser.txt" />
+    <None Include="Assets\Slua\example\example-pbc\Resources\protoTest.txt" />
+    <None Include="Assets\Slua\example\example-pbc\Resources\protoTest\addressbookTxt.txt" />
+    <None Include="Assets\Slua\example\example-pbc\Resources\protoTest\test.txt" />
+    <None Include="Assets\Slua\example\example-pbc\Resources\protoTest\test2.txt" />
+    <None Include="Assets\Slua\example\example-pbc\Resources\protoTest\testparser.txt" />
+    <None Include="Assets\Slua\example\example-pbc\Resources\protobuf.txt" />
+    <None Include="Assets\Slua\example\example-sproto\Resources\print_r.txt" />
+    <None Include="Assets\Slua\example\example-sproto\Resources\sproto.txt" />
+    <None Include="Assets\Slua\example\example-sproto\Resources\sprotoTest\test.txt" />
+    <None Include="Assets\Slua\example\example-sproto\Resources\sprotoTest\testall.txt" />
+    <None Include="Assets\Slua\example\example-sproto\Resources\sprotoTest\testrpc.txt" />
+    <None Include="Assets\Slua\example\example-sproto\Resources\sproto_test.txt" />
+    <None Include="Assets\Slua\example\example-sproto\Resources\sprotoparser.txt" />
+    <None Include="Assets\Slua\example\example-sqlite\Resources\lunit.txt" />
+    <None Include="Assets\Slua\example\example-sqlite\Resources\sqliteTest.txt" />
+    <None Include="Assets\Slua\example\example-sqlite\Resources\sqliteTest\test.txt" />
+    <None Include="Assets\Slua\example\example-sqlite\Resources\sqliteTest\tests-sqlite3.txt" />
     <None Include="Assets\StreamingAssets\config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

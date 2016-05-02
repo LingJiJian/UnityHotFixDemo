@@ -28,6 +28,7 @@ public class ExportConfigWindow : EditorWindow
         if (GUILayout.Button("run"))
         {
             ExportAssetBundles.Run();
+            this.Close();
         }
     }
 

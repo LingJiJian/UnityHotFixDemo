@@ -1,12 +1,13 @@
 ﻿using SLua;
 using System.IO;
 using UnityEngine;
+using System.Collections;
 using UnityEngine.Events;
 
+[CustomLuaClassAttribute]
 public class Game : MonoBehaviour
 {
     private static LuaSvr _l;
-    private int _progress = 0;
 
     public UnityAction<int> onProgressHandler;
 
@@ -19,9 +20,9 @@ public class Game : MonoBehaviour
 #else
 		Application.RegisterLogCallback(this.log);
 #endif
-            LuaState.loaderDelegate = _loadFileWithSuffix;
+            LuaState.loaderDelegate = loadFileWithSuffix;
             _l = new LuaSvr();
-            _l.init(tick, complete, LuaSvrFlag.LSF_BASIC);
+            _l.init(tick, complete);
         }
         else
         {
@@ -41,15 +42,13 @@ public class Game : MonoBehaviour
 
     void tick(int p)
     {
-        _progress = p;
-
         if (onProgressHandler != null)
         {
             onProgressHandler.Invoke(p);
         }
     }
 
-    protected byte[] _loadFileWithSuffix(string strFile)
+    protected byte[] loadFileWithSuffix(string strFile)
     {
         if (string.IsNullOrEmpty(strFile))
         {
@@ -85,5 +84,6 @@ public class Game : MonoBehaviour
     void complete()
     {
         _l.start("main");
+        
     }
 }

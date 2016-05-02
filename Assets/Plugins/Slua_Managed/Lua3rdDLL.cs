@@ -9,11 +9,16 @@ using UnityEngine;
 #endif
 
 namespace SLua{
-	public static class Lua3rdDLL{
-		static Dictionary<string, LuaCSFunction> DLLRegFuncs = new Dictionary<string, LuaCSFunction>();
+	public static class Lua3rdDLL
+    {
+        static Dictionary<string, LuaCSFunction> DLLRegFuncs = new Dictionary<string, LuaCSFunction>();
 		
 		static Lua3rdDLL(){
-			// LuaSocketDLL.Reg(DLLRegFuncs);
+			LuasocketLib.Reg(DLLRegFuncs);
+			CjsonLib.Reg(DLLRegFuncs);
+			PbcLib.Reg(DLLRegFuncs);
+			SprotoLib.Reg(DLLRegFuncs);
+			SqliteLib.Reg(DLLRegFuncs);
 		}
 		
 		public static void open(IntPtr L){

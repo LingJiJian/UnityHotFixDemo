@@ -44,7 +44,7 @@ public class ExportAssetBundles : Editor
         buildMap[1].assetBundleName = "sceneBundles";
         buildMap[1].assetNames = scenes.ToArray();
 
-        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", buildMap,BuildAssetBundleOptions.None,BuildTarget.StandaloneWindows);
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", buildMap,BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
         AssetDatabase.Refresh();
 
         Debug.Log("AssetBundles 打包完成 位于：Assets/StreamingAssets");

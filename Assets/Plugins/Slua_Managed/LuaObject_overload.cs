@@ -89,6 +89,18 @@ namespace SLua
 			return true;
 		}
 
+		static public bool checkType(IntPtr l, int p, out ByteArray pb)
+		{
+			if (LuaDLL.lua_isstring(l, p))
+			{
+				pb = new ByteArray();
+				pb.data = LuaDLL.lua_tobytes(l, p);
+				return true;
+			}
+			pb = null;
+			return false;
+		}
+
 		static public bool checkParams(IntPtr l, int p, out Vector2[] pars)
 		{
 			int top = LuaDLL.lua_gettop(l);
@@ -158,6 +170,11 @@ namespace SLua
 		public static void pushValue(IntPtr l, Color o)
 		{
 			LuaDLL.luaS_pushColor(l, o.r, o.g, o.b, o.a);
+		}
+
+		public static void pushValue(IntPtr l, ByteArray pb)
+		{
+			LuaDLL.lua_pushlstring(l, pb.data , pb.data.Length);
 		}
 	}
 }

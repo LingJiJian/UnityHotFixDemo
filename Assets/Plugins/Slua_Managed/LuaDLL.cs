@@ -86,6 +86,40 @@ namespace LuaInterface
 #else
         const string LUADLL = "slua";
 #endif
+        //pdc
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_protobuf_c(IntPtr luaState);
+
+        //lpeg
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_lpeg(IntPtr luaState);
+
+        //cjson
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_cjson(IntPtr luaState);
+
+        //lua socket
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_socket_core(IntPtr luaState);
+
+        //lua socket mime
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_mime_core(IntPtr luaState);
+
+        //sproto
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_sproto_core(IntPtr luaState);
+
+        //sqlite
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static extern int luaopen_lsqlite3(IntPtr luaState);
 
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void luaS_openextlibs(IntPtr L);
@@ -532,6 +566,21 @@ namespace LuaInterface
             }
             return null;
         }
+
+		public static byte[] lua_tobytes(IntPtr luaState, int index)
+		{
+			int strlen;
+
+			IntPtr str = luaS_tolstring32(luaState, index, out strlen); // fix il2cpp 64 bit
+
+			if (str != IntPtr.Zero)
+			{
+				byte[] bytes = new byte[strlen];
+				Marshal.Copy(str, bytes,0,strlen);
+				return bytes;
+			}
+			return null;
+		}
 
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr lua_atpanic(IntPtr luaState, LuaCSFunction panicf);
