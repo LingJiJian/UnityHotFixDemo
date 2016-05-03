@@ -1,0 +1,9 @@
+
+
+local test1 = require "sqliteTest/test"
+local test2 = require "sqliteTest/tests-sqlite3"
+
+
+function main()
+
+end

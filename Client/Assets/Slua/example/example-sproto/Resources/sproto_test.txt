@@ -1,0 +1,10 @@
+
+local test1 = require "sprotoTest/test"
+local test2 = require "sprotoTest/testall"
+local test3 = require "sprotoTest/testrpc"
+
+
+
+function main()
+	--
+end

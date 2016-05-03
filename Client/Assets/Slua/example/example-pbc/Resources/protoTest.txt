@@ -1,0 +1,10 @@
+
+
+local test1 = require "protoTest/test"
+local test2 = require "protoTest/test2"
+-- local test3 = require "protoTest/testparser" -- you also can try parse text proto buff in editor.
+
+
+function main()
+
+end

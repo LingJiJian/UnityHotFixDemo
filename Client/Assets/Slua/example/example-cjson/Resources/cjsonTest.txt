@@ -1,0 +1,8 @@
+
+
+local test1 = require "cjsonTest/test1"
+
+
+function main()
+
+end

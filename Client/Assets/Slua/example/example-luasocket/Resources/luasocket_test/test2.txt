@@ -1,0 +1,6 @@
+
+
+local socket = require("socket")
+print("socket._VERSION:", socket._VERSION)
+local http = require("socket.http")
+print("http:", http.request("http://www.luzexi.com/static-page/Tween.htm"))

@@ -1,0 +1,9 @@
+
+
+--local test1 = require "luasocket_test/testclnt"
+local test2 = require "luasocket_test/test2"
+
+
+function main()
+
+end

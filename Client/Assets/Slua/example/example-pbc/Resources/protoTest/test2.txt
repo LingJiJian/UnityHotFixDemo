@@ -1,0 +1,37 @@
+local protobuf = require "protobuf"
+
+--local dir_path = UnityEngine.Application.dataPath .. "/Slua/Resources/protoTest"
+
+--addr = io.open(dir_path .. "/addressbook.pb","rb")
+--buffer = addr:read "*a"
+--addr:close()
+
+buffer = ProtoTest.GetProtoBytes()
+
+protobuf.register(buffer)
+
+local person = {
+	name = "Alice",
+	id = 123,
+	phone = {
+		{ number = "123456789" , type = "MOBILE" },
+		{ number = "87654321" , type = "HOME" },
+	}
+}
+
+local buffer = protobuf.encode("tutorial.Person", person)
+ProtoTest.SetProtoBytes(buffer)
+local t = protobuf.decode("tutorial.Person", buffer)
+
+for k,v in pairs(t) do
+	if type(k) == "string" then
+		print(k,v)
+	end
+end
+
+print(t.phone[2].type)
+
+for k,v in pairs(t.phone[1]) do
+	print(k,v)
+end
+

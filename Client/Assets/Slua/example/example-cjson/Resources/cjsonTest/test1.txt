@@ -1,0 +1,26 @@
+local json = require "cjson"
+local util = require "cjsonTest.util"
+
+local json_text = '{ \"Image\": { \
+       \"Width\":  800, \
+       \"Height\": 600, \
+       \"Title\":  \"View from 15th Floor\", \
+       \"Thumbnail\": { \
+           \"Url\":    \"http://www.example.com/image/481989943\", \
+           \"Height\": 125, \
+           \"Width\":  \"100\" \
+       }, \
+       \"IDs\": [116, 943, 234, 38793] \
+     } \
+}'
+
+local t = json.decode(json_text)
+print(util.serialise_value(t))
+
+local txt_json = json.encode(t)
+print(txt_json)
+
+
+function main()
+
+end
